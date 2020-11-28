@@ -1,0 +1,56 @@
+@import "../../common/style";
+
+.News {
+  margin-top: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: $borders-radius;
+}
+
+.Info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+
+}
+
+.mainInfo {
+
+  .title {
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 7px;
+  }
+
+  .otherInfo {
+    display: flex;
+    font-size: 14px;
+    color: #7b7b7b;
+
+    div:last-child {
+      margin-left: 10px;
+    }
+  }
+}
+
+.site {
+  display: flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid #0575ff;
+  cursor: pointer;
+}
+
+.Comments {
+  margin-top: 25px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+  }
+
+}

@@ -1,0 +1,20 @@
+@import "../../common/style";
+
+.TopBar {
+  position: fixed;
+  top: 0;
+  height: var(--header-height);
+  width: 100vw;
+  background: #fff;
+}
+
+.Container {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  height: 100%;
+  width: var(--container-width);
+  font-weight: 800;
+  font-size: 23px;
+  color: #0575ff;
+}

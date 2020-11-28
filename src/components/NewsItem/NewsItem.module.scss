@@ -1,0 +1,63 @@
+@import "../../common/style";
+
+.Item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 90px;
+  padding: 20px;
+
+  background: white;
+  //box-shadow: 0 0 10px rgba(0, 0, 0, .05);
+  border-radius: $borders-radius;
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
+
+.ItemTitle {
+  font-weight: 600;
+}
+
+.ItemInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  .MainInfo {
+    font-size: 14px;
+    color: #848484;
+    display: flex;
+
+    :last-child {
+      margin-left: 10px;
+    }
+  }
+
+  .ItemPoints {
+    padding: 6px 12px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 15px;
+
+    &.high {
+      color: rgb(0, 255, 118);
+      background: rgba(0, 255, 118, 0.09);
+    }
+
+    &.mid {
+      color: rgb(255, 187, 0);
+      background: rgba(255, 187, 0, 0.14);
+    }
+
+    &.low {
+      color: rgb(127, 127, 127);
+      background: rgba(200, 200, 200, 0.20);
+    }
+  }
+}
+
+
+
+
