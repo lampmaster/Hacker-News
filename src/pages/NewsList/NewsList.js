@@ -1,22 +1,73 @@
-import React, {useContext, useEffect} from 'react';
+import React, {Component} from 'react';
 import classes from './NewsList.module.scss'
 import {NewsItem} from "../../components/NewsItem/NewsItem";
-import {NewsContext} from "../../context/news/newsContext";
+import {connect} from "react-redux";
+import {getNewsList} from "../../store/actions/newsActions";
 import {Loader} from "../../components/Loader/Loader";
+import Button from "@material-ui/core/Button";
 
-export const NewsList = () => {
-    const {getNewsList, newsList, loading} = useContext(NewsContext);
+class NewsList extends Component {
+    constructor(props) {
+        super(props);
+        this.autoupdateTimer = null;
+    }
 
-    useEffect(() => {
-        getNewsList();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    componentDidMount() {
+        this.props.getNewsList();
+        this.autoUpdateNews();
+    }
 
-    const newsListTemplate = newsList.map(news => {
-        return <NewsItem key={news.id} news={news}/>
-    });
+    componentWillUnmount() {
+        clearTimeout(this.autoupdateTimer);
+    }
 
-    return (
-        <div className={classes.NewsList}>{newsListTemplate}</div>
-    )
-};
+    autoUpdateNews() {
+        this.autoupdateTimer = setTimeout(() => {
+            this.props.getNewsList()
+        }, 60000)
+    }
+
+    renderNewsList() {
+        const list = this.props.newsList.map(news => {
+            return <NewsItem key={news.id} news={news}/>
+        });
+
+        return (
+            <React.Fragment>
+                <div className={classes.header}>
+                    <div className={classes.headerTitle}>100 свежих новостей</div>
+                    <Button onClick={this.props.getNewsList}>Update</Button>
+                </div>
+                {list}
+            </React.Fragment>
+        )
+
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                {
+                    this.props.loading
+                        ? <Loader/>
+                        : <div className={classes.NewsList}>{this.renderNewsList()}</div>
+                }
+            </React.Fragment>
+        )
+    }
+}
+
+function mapStateToProps(state) {
+    return {
+        newsList: state.news.newsList,
+        loading: state.news.loading
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        getNewsList: () => dispatch(getNewsList())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewsList)

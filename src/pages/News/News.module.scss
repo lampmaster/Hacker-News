@@ -1,10 +1,14 @@
 @import "../../common/style";
 
+.navigation {
+  margin: 20px 0 10px;
+}
+
 .News {
-  margin-top: 20px;
   padding: 20px;
   background: white;
   border-radius: $borders-radius;
+  margin-bottom: 20px;
 }
 
 .Info {
@@ -26,7 +30,7 @@
   .otherInfo {
     display: flex;
     font-size: 14px;
-    color: #7b7b7b;
+    color: $second-color;
 
     div:last-child {
       margin-left: 10px;
