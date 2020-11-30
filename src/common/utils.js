@@ -5,7 +5,6 @@ export const getDate = (unixTime) => {
     const y = date.getFullYear();
     const time = getTime(date);
     const dateStr = [d, m, y].join('.');
-
     return `${dateStr} at ${time}`
 };
 
@@ -26,4 +25,12 @@ export const getHostName = (url) => {
     }
 
     return null
+};
+
+export const objIsEmpty = (obj) => {
+    return isObj(obj) && Object.values(obj).length !== 0;
+};
+
+export const isObj = (obj) => {
+    return obj !== null && typeof obj === 'object' && !Array.isArray(obj)
 };
