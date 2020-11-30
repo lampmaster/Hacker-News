@@ -3,6 +3,7 @@
 .wrapper {
   margin: 10px 0;
   display: flex;
+  animation: show-comments .7s ease-out;
   &:last-child {
     margin-bottom: 0;
   }
@@ -44,5 +45,12 @@
   }
 }
 
+@keyframes show-comments {
+  from {
+    opacity: 0;
+  }
 
-
+  to {
+    opacity: 1;
+  }
+}
