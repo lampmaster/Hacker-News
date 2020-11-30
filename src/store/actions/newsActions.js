@@ -48,6 +48,7 @@ export function getComments(newsId) {
         dispatch(getCommentsStart());
         try {
             const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`);
+            dispatch(setMessage('Comments loading...'))
             if (typeof response.data.kids !== 'undefined') {
                 const comments = await parseComments(response.data.kids);
                 dispatch(getCommentsSuccess(comments));
