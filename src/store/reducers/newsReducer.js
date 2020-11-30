@@ -1,11 +1,12 @@
 import {
+    CLEAR_ERROR, CLEAR_MESSAGE,
     GET_COMMENTS_ERROR, GET_COMMENTS_START, GET_COMMENTS_SUCCESS,
     GET_NEWS_ERROR,
     GET_NEWS_LIST_ERROR,
     GET_NEWS_LIST_START,
     GET_NEWS_LIST_SUCCESS,
     GET_NEWS_START,
-    GET_NEWS_SUCCESS, NEWS_CLEAR,
+    GET_NEWS_SUCCESS, NEWS_CLEAR, NEWS_HAS_NO_COMMENTS, SET_MESSAGE,
 } from "../actions/actionTypes";
 
 const initialNewsCommentsState = {
@@ -18,7 +19,8 @@ const initialState = {
     news: {},
     newsComments: initialNewsCommentsState,
     loading: false,
-    error: null
+    error: null,
+    message: null,
 };
 
 const handlers = {
@@ -32,6 +34,10 @@ const handlers = {
     [GET_COMMENTS_START]: (state) => ({...state}),
     [GET_COMMENTS_SUCCESS]: (state, action) => ({...state, newsComments: action.newsComments}),
     [GET_COMMENTS_ERROR]: (state, action) => ({...state, error: action.error, loading: false}),
+    [CLEAR_ERROR]: (state) => ({...state, error: null}),
+    [SET_MESSAGE]: (state, action) => ({...state, message: action.message}),
+    [CLEAR_MESSAGE]: (state) => ({...state, message: null}),
+    [NEWS_HAS_NO_COMMENTS]: state => state,
     DEFAULT: state => state
 };
 

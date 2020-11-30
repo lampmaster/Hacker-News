@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import classes from './News.module.scss'
 import Button from "@material-ui/core/Button";
 import {Loader} from "../../components/Loader/Loader";
-import {getDate, getHostName} from "../../common/utils";
+import {getDate, getHostName, objIsEmpty} from "../../common/utils";
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {clearNews, getComments, getNews} from "../../store/actions/newsActions";
@@ -29,8 +29,8 @@ class News extends Component {
     }
 
     autoUpdateComments() {
-        this.autoupdateTimer = setTimeout(() => {
-            this.props.getComments(this.newsId)
+        this.autoupdateTimer = setInterval(() => {
+            this.props.getComments(this.newsId);
         }, 60000)
     }
 
@@ -50,18 +50,22 @@ class News extends Component {
                         ? <Loader/>
                         :
                         <React.Fragment>
-                            <div className={classes.Container}>
-                                <div className={classes.Info}>
-                                    <div className={classes.mainInfo}>
-                                        <div className={classes.title}>{this.props.news.title}</div>
-                                        <div className={classes.otherInfo}>
-                                            <div>{this.props.news.by}</div>
-                                            <div>{getDate(this.props.news.time)}</div>
+                            {
+                                objIsEmpty(this.props.news) &&
+                                <div className={classes.Container}>
+                                    <div className={classes.Info}>
+                                        <div className={classes.mainInfo}>
+                                            <div className={classes.title}>{this.props.news.title}</div>
+                                            <div className={classes.otherInfo}>
+                                                <div>{this.props.news.by}</div>
+                                                <div>{getDate(this.props.news.time)}</div>
+                                            </div>
                                         </div>
+                                        <div onClick={() => this.goToPage()} className={classes.site}>{getHostName(this.props.news.url)}</div>
                                     </div>
-                                    <div onClick={() => this.goToPage()} className={classes.site}>{getHostName(this.props.news.url)}</div>
                                 </div>
-                            </div>
+                            }
+
 
                             <div className={classes.Container}>
                                 <div className={classes.Comments}>

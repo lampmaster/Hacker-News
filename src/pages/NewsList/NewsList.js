@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import classes from './NewsList.module.scss'
 import {NewsItem} from "../../components/NewsItem/NewsItem";
 import {connect} from "react-redux";
-import {getNewsList} from "../../store/actions/newsActions";
+import {getNewsList, setMessage} from "../../store/actions/newsActions";
 import {Loader} from "../../components/Loader/Loader";
 import Button from "@material-ui/core/Button";
 
@@ -22,9 +22,16 @@ class NewsList extends Component {
     }
 
     autoUpdateNews() {
-        this.autoupdateTimer = setTimeout(() => {
-            this.props.getNewsList()
-        }, 60000)
+        this.autoupdateTimer = setInterval(() => {
+            this.props.getNewsList();
+            this.props.setMessage('Auto update news list')
+        }, 60000);
+    }
+
+    updateNewsList() {
+        this.props.getNewsList();
+        clearTimeout(this.autoupdateTimer);
+        this.autoUpdateNews();
     }
 
     renderNewsList() {
@@ -36,7 +43,7 @@ class NewsList extends Component {
             <React.Fragment>
                 <div className={classes.header}>
                     <div className={classes.headerTitle}>Last 100 News</div>
-                    <Button onClick={this.props.getNewsList}>Update</Button>
+                    <Button onClick={() => this.updateNewsList()}>Update</Button>
                 </div>
                 {list}
             </React.Fragment>
@@ -66,7 +73,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getNewsList: () => dispatch(getNewsList())
+        getNewsList: () => dispatch(getNewsList()),
+        setMessage: (msg) => dispatch(setMessage(msg))
     }
 }
 

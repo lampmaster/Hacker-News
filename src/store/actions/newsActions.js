@@ -1,12 +1,13 @@
 import axios from "axios";
 import {
+    CLEAR_ERROR, CLEAR_MESSAGE,
     GET_COMMENTS_ERROR,
-    GET_COMMENTS_START, GET_COMMENTS_SUCCESS,
+    GET_COMMENTS_START, GET_COMMENTS_SUCCESS, GET_NEWS_ERROR,
     GET_NEWS_LIST_ERROR,
     GET_NEWS_LIST_START,
     GET_NEWS_LIST_SUCCESS,
     GET_NEWS_START,
-    GET_NEWS_SUCCESS, NEWS_CLEAR
+    GET_NEWS_SUCCESS, NEWS_CLEAR, NEWS_HAS_NO_COMMENTS, SET_MESSAGE
 } from "./actionTypes";
 
 export function getNewsList(){
@@ -15,15 +16,14 @@ export function getNewsList(){
         try {
             const response = await axios.get('https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty');
             const newsIDs = response.data.slice(0, 100);
-            const newsArrayResponse = await Promise.all(newsIDs.map(async (newsID) => {
+            let newsList = await Promise.all(newsIDs.map(async (newsID) => {
                 const resp = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${String(newsID)}.json?print=pretty`);
                 return resp.data;
             }));
 
-            newsArrayResponse.filter(news => news !== null);
+            newsList = newsList.filter(news => news !== null);
 
-            dispatch(getNewsListSuccess(newsArrayResponse));
-            // dispatch(autoGetNewsList())
+            dispatch(getNewsListSuccess(newsList));
         } catch (e) {
             dispatch(getNewsListError(e))
         }
@@ -49,9 +49,11 @@ export function getComments(newsId) {
         try {
             const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`);
             if (typeof response.data.kids !== 'undefined') {
-                dispatch(getCommentsStart());
                 const comments = await parseComments(response.data.kids);
                 dispatch(getCommentsSuccess(comments));
+                dispatch(setMessage('Comments updated'))
+            } else {
+                dispatch(newsHasNoComments())
             }
         } catch (e) {
             dispatch(getCommentsError(e))
@@ -60,13 +62,16 @@ export function getComments(newsId) {
 }
 
 async function parseComments(commentsIDs) {
-    const {comments, childCommentsNumber} = await wrapper(commentsIDs);
-
     async function wrapper(ids) {
         let numberOfComments = ids.length;
         const result = await Promise.all(ids.map(async commentID => {
             const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${commentID}.json?print=pretty`);
             const comment = response.data;
+
+            if (comment.deleted) {
+                comment.by = 'Deleted comment'
+            }
+
             if (typeof comment.kids !== "undefined") {
                 const {comments, childCommentsNumber} = await wrapper(comment.kids);
                 comment.kids = comments;
@@ -79,8 +84,16 @@ async function parseComments(commentsIDs) {
         return {comments: result, childCommentsNumber: numberOfComments};
     }
 
+    const {comments, childCommentsNumber} = await wrapper(commentsIDs);
 
     return {comments, numberOfComments: childCommentsNumber};
+}
+
+export function clearError() {
+    return {
+        type: CLEAR_ERROR
+    }
+
 }
 
 export function getNewsListStart() {
@@ -118,7 +131,7 @@ export function getNewsSuccess(news) {
 
 export function getNewsError(error) {
     return {
-        type: GET_NEWS_SUCCESS,
+        type: GET_NEWS_ERROR,
         error
     }
 }
@@ -136,6 +149,13 @@ export function getCommentsSuccess(newsComments) {
     }
 }
 
+export function newsHasNoComments(newsComments) {
+    return {
+        type: NEWS_HAS_NO_COMMENTS,
+        newsComments
+    }
+}
+
 export function getCommentsError(error) {
     return {
         type: GET_COMMENTS_ERROR,
@@ -146,6 +166,19 @@ export function getCommentsError(error) {
 export function clearNews() {
     return {
         type: NEWS_CLEAR
+    }
+}
+
+export function setMessage(message) {
+    return {
+        type: SET_MESSAGE,
+        message
+    }
+}
+
+export function clearMessage() {
+    return {
+        type: CLEAR_MESSAGE
     }
 }
 
