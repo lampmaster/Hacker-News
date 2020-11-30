@@ -18,6 +18,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: #F2F8FE;
   color: #4b4b4b;
+  width: 100vw;
 }
 
 code {
@@ -46,6 +47,5 @@ p {
   max-width: var(--container-width);
   margin: var(--header-height) auto 0;
   overflow: auto;
-
 }
 

@@ -3,11 +3,13 @@ import {TopBar} from "./components/Topbar/Topbar";
 import {BrowserRouter, Switch, Route} from "react-router-dom";
 import NewsList from "./pages/NewsList/NewsList";
 import News from "./pages/News/News";
+import Message from "./components/Message/Message";
 
 function App() {
   return (
         <BrowserRouter>
             <TopBar/>
+            <Message/>
             <div className="container">
                 <Switch>
                     <Route path="/" exact component={NewsList}/>
