@@ -17,5 +17,12 @@
   width: var(--container-width);
   font-weight: 800;
   font-size: 23px;
-  color: #0575ff;
+  color: var(--text-color);
+
+  .avatar {
+    position: relative;
+    width: 30px;
+    margin-right: 5px;
+    top: -3px;
+  }
 }

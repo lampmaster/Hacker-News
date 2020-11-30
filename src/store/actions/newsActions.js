@@ -85,7 +85,6 @@ async function parseComments(commentsIDs) {
     }
 
     const {comments, childCommentsNumber} = await wrapper(commentsIDs);
-
     return {comments, numberOfComments: childCommentsNumber};
 }
 
@@ -93,7 +92,6 @@ export function clearError() {
     return {
         type: CLEAR_ERROR
     }
-
 }
 
 export function getNewsListStart() {

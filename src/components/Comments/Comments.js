@@ -24,7 +24,7 @@ export const Comments = ({comments, openedReplies, onChange}) => {
                     return (
                         <div key={comment.id} className={classes.wrapper}>
                             <img className={classes.avatar}
-                                 src={`https://avatars.dicebear.com/api/bottts/${comment.by}.svg`} alt=""/>
+                                 src={`https://avatars.dicebear.com/api/bottts/${comment.by}.svg?options[width][]=30`} alt=""/>
                             <div className={classes.comment}>
                                 <div className={classes.nick}>{comment.by}</div>
                                 <div className={classes.text}>{comment.text}</div>

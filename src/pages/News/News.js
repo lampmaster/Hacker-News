@@ -44,7 +44,6 @@ class News extends Component {
                 <div className={classes.navigation}>
                     <Link to="/"><Button>Back to main</Button></Link>
                 </div>
-
                 {
                     this.props.loading
                         ? <Loader/>
@@ -66,7 +65,6 @@ class News extends Component {
                                 </div>
                             }
 
-
                             <div className={classes.Container}>
                                 <div className={classes.Comments}>
                                     <div>{`Comments ${this.props.newsComments.numberOfComments}`}</div>
@@ -82,9 +80,7 @@ class News extends Component {
                                 />
                             </div>
                         </React.Fragment>
-
                 }
-
             </React.Fragment>
         )
     }

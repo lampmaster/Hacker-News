@@ -3,6 +3,7 @@
 :root {
   --header-height: 70px;
   --container-width: 800px;
+  --text-color: #4b4b4b;
 }
 
 * {
@@ -17,7 +18,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: #F2F8FE;
-  color: #4b4b4b;
+  color: var(--text-color);
   width: 100vw;
 }
 

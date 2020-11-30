@@ -9,7 +9,7 @@ export const NewsItem = ({news}) => {
 
     if (news.score <= 1) {
         scoreStyle.push(classes.low)
-    } else if (news.score < 50) {
+    } else if (news.score < 30) {
         scoreStyle.push(classes.mid)
     } else {
         scoreStyle.push(classes.high)
