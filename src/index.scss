@@ -47,6 +47,7 @@ p {
 .container {
   max-width: var(--container-width);
   margin: var(--header-height) auto 0;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 

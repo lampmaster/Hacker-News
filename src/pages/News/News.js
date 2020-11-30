@@ -50,7 +50,7 @@ class News extends Component {
                         :
                         <React.Fragment>
                             {
-                                objIsEmpty(this.props.news) &&
+                                !objIsEmpty(this.props.news) &&
                                 <div className={classes.Container}>
                                     <div className={classes.Info}>
                                         <div className={classes.mainInfo}>
