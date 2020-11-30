@@ -1,10 +1,14 @@
 @import "../../common/style";
 
-.News {
-  margin-top: 20px;
+.navigation {
+  margin: 20px 0 10px;
+}
+
+.Container {
   padding: 20px;
   background: white;
   border-radius: $borders-radius;
+  margin-bottom: 20px;
 }
 
 .Info {
@@ -21,12 +25,13 @@
     font-weight: 600;
     font-size: 20px;
     margin-bottom: 7px;
+    margin-right: 20px;
   }
 
   .otherInfo {
     display: flex;
     font-size: 14px;
-    color: #7b7b7b;
+    color: $second-color;
 
     div:last-child {
       margin-left: 10px;
@@ -44,13 +49,8 @@
 }
 
 .Comments {
-  margin-top: 25px;
-
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-  }
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
 }

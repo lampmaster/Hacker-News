@@ -1,0 +1,48 @@
+@import "../../common/style";
+
+.wrapper {
+  margin: 10px 0;
+  display: flex;
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .comment {
+    flex: 1;
+  }
+
+  .avatar {
+    height: 30px;
+    margin-right: 7px;
+  }
+  .nick {
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .text {
+    word-wrap: break-word;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+
+  .time {
+    color: $second-color;
+  }
+
+  .replies {
+    color: #0575ff;
+    cursor: pointer;
+  }
+}
+
+
+
