@@ -75,7 +75,7 @@ async function parseComments(commentsIDs) {
             if (typeof comment.kids !== "undefined") {
                 const {comments, childCommentsNumber} = await wrapper(comment.kids);
                 comment.kids = comments;
-                comment.childComentsNumber = childCommentsNumber;
+                comment.childCommentsNumber = childCommentsNumber;
                 numberOfComments += childCommentsNumber;
             }
             return comment
