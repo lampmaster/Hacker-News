@@ -4,16 +4,19 @@
   margin: 10px 0;
   display: flex;
   animation: show-comments .7s ease-out;
+
   &:last-child {
     margin-bottom: 0;
   }
 
   .comment {
     flex: 1;
+    width: 100px;
   }
 
   .avatar {
     height: 30px;
+    width: 30px;
     margin-right: 7px;
   }
   .nick {

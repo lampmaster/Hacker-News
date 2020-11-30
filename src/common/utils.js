@@ -28,7 +28,7 @@ export const getHostName = (url) => {
 };
 
 export const objIsEmpty = (obj) => {
-    return isObj(obj) && Object.values(obj).length !== 0;
+    return isObj(obj) && Object.values(obj).length === 0;
 };
 
 export const isObj = (obj) => {
