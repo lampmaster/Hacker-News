@@ -17,6 +17,10 @@ export const Comments = ({comments, openedReplies, onChange}) => {
         onChange(openedReplies);
     };
 
+    const repliesText = (childCommentsNumber) => {
+        return childCommentsNumber ? `${childCommentsNumber} replies` : ''
+    };
+
     return (
         <React.Fragment>
             {
@@ -33,7 +37,7 @@ export const Comments = ({comments, openedReplies, onChange}) => {
                                     <div onClick={() => {
                                         openReplies(comment.id)
                                     }}
-                                         className={classes.replies}>{comment.childComentsNumber ? `${comment.childComentsNumber} replies` : ''}</div>
+                                         className={classes.replies}>{repliesText(comment.childCommentsNumber)}</div>
                                 </div>
                                 <React.Fragment>
                                     {
