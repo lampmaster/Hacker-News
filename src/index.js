@@ -4,8 +4,8 @@ import './index.scss';
 import App from './App';
 import {compose, createStore, applyMiddleware} from "redux";
 import {Provider} from "react-redux";
-import rootReducer from "./store/reducers/rootReducer";
 import thunk from 'redux-thunk';
+import {newsReducer} from "./store/reducers/newsReducer";
 
 const composeEnhancers =
     typeof window === 'object' &&
@@ -14,7 +14,7 @@ const composeEnhancers =
         }) : compose;
 
 const store = createStore(
-    rootReducer,
+    newsReducer,
     composeEnhancers(
         applyMiddleware(thunk)
     )

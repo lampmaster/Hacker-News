@@ -4,7 +4,7 @@
   margin: 20px 0 10px;
 }
 
-.News {
+.Container {
   padding: 20px;
   background: white;
   border-radius: $borders-radius;
@@ -48,13 +48,8 @@
 }
 
 .Comments {
-  margin-top: 25px;
-
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-  }
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
 }

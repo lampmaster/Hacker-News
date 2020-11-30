@@ -5,21 +5,33 @@ import {Loader} from "../../components/Loader/Loader";
 import {getDate, getHostName} from "../../common/utils";
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
-import {clearNews, getNews} from "../../store/actions/newsActions";
+import {clearNews, getComments, getNews} from "../../store/actions/newsActions";
 import {Comments} from "../../components/Comments/Comments";
 
 class News extends Component {
     constructor(props) {
         super(props);
-        this.newsID = this.props.match.params.id;
+        this.newsId = this.props.match.params.id;
+        this.state = {
+            openedReplies: {}
+        };
+        this.autoupdateTimer = null;
     }
 
     componentDidMount() {
-        this.props.getNews(this.newsID);
+        this.props.getNews(this.newsId);
+        this.autoUpdateComments();
     }
 
     componentWillUnmount() {
         this.props.clearNews();
+        clearTimeout(this.autoupdateTimer)
+    }
+
+    autoUpdateComments() {
+        this.autoupdateTimer = setTimeout(() => {
+            this.props.getComments(this.newsId)
+        }, 60000)
     }
 
     goToPage() {
@@ -36,27 +48,36 @@ class News extends Component {
                 {
                     this.props.loading
                         ? <Loader/>
-                        : <div className={classes.News}>
-                            <div className={classes.Info}>
-                                <div className={classes.mainInfo}>
-                                    <div className={classes.title}>{this.props.news.title}</div>
-                                    <div className={classes.otherInfo}>
-                                        <div>{this.props.news.by}</div>
-                                        <div>{getDate(this.props.news.time)}</div>
+                        :
+                        <React.Fragment>
+                            <div className={classes.Container}>
+                                <div className={classes.Info}>
+                                    <div className={classes.mainInfo}>
+                                        <div className={classes.title}>{this.props.news.title}</div>
+                                        <div className={classes.otherInfo}>
+                                            <div>{this.props.news.by}</div>
+                                            <div>{getDate(this.props.news.time)}</div>
+                                        </div>
                                     </div>
+                                    <div onClick={() => this.goToPage()} className={classes.site}>{getHostName(this.props.news.url)}</div>
                                 </div>
-                                <div onClick={this.goToPage} className={classes.site}>{getHostName(this.props.news.url)}</div>
                             </div>
 
-                            <div className={classes.Comments}>
-                                <div className={classes.header}>
+                            <div className={classes.Container}>
+                                <div className={classes.Comments}>
                                     <div>{`Comments ${this.props.newsComments.numberOfComments}`}</div>
-                                    <Button color="primary">Update</Button>
+                                    <Button
+                                        color="primary"
+                                        onClick={() => this.props.getComments(this.newsId)}
+                                    >Update</Button>
                                 </div>
+                                <Comments
+                                    comments={this.props.newsComments.comments}
+                                    openedReplies={this.state.openedReplies}
+                                    onChange={(openedReplies) => this.setState({openedReplies})}
+                                />
                             </div>
-
-
-                        </div>
+                        </React.Fragment>
 
                 }
 
@@ -67,16 +88,17 @@ class News extends Component {
 
 function mapStateToProps(state) {
     return {
-        news: state.news.news,
-        newsComments: state.news.newsComments,
-        loading: state.news.loading
+        news: state.news,
+        newsComments: state.newsComments,
+        loading: state.loading
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         getNews: (newsId) => dispatch(getNews(newsId)),
-        clearNews: () => dispatch(clearNews())
+        clearNews: () => dispatch(clearNews()),
+        getComments: (newsId) => dispatch(getComments(newsId)),
     }
 }
 

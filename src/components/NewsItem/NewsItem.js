@@ -21,7 +21,7 @@ export const NewsItem = ({news}) => {
             <div className={classes.ItemInfo}>
                 <div className={classes.MainInfo}>
                     <div>{news.by}</div>
-                    <div>{getDate(news.date)}</div>
+                    <div>{getDate(news.time)}</div>
                 </div>
 
                 <div className={scoreStyle.join(' ')}>{`${news.score} point${postfix}`}</div>

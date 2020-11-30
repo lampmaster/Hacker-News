@@ -14,11 +14,13 @@ export function getNewsList(){
         dispatch(getNewsListStart());
         try {
             const response = await axios.get('https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty');
-            const newsIDs = response.data.slice(0, 100).filter(news => news !== null);
+            const newsIDs = response.data.slice(0, 100);
             const newsArrayResponse = await Promise.all(newsIDs.map(async (newsID) => {
                 const resp = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${String(newsID)}.json?print=pretty`);
                 return resp.data;
             }));
+
+            newsArrayResponse.filter(news => news !== null);
 
             dispatch(getNewsListSuccess(newsArrayResponse));
             // dispatch(autoGetNewsList())

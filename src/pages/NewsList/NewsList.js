@@ -35,7 +35,7 @@ class NewsList extends Component {
         return (
             <React.Fragment>
                 <div className={classes.header}>
-                    <div className={classes.headerTitle}>100 свежих новостей</div>
+                    <div className={classes.headerTitle}>Last 100 News</div>
                     <Button onClick={this.props.getNewsList}>Update</Button>
                 </div>
                 {list}
@@ -59,8 +59,8 @@ class NewsList extends Component {
 
 function mapStateToProps(state) {
     return {
-        newsList: state.news.newsList,
-        loading: state.news.loading
+        newsList: state.newsList,
+        loading: state.loading
     }
 }
 
