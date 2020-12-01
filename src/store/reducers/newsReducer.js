@@ -11,7 +11,7 @@ import {
 
 const initialNewsCommentsState = {
     comments: [],
-    numberOfComments: null
+    numberOfComments: 0
 };
 
 const initialState = {
