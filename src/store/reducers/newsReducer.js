@@ -9,15 +9,15 @@ import {
     GET_NEWS_SUCCESS, NEWS_CLEAR, NEWS_HAS_NO_COMMENTS, SET_MESSAGE,
 } from "../actions/actionTypes";
 
-const initialNewsCommentsState = {
-    comments: [],
-    numberOfComments: 0
-};
+// const initialNewsCommentsState = {
+//     comments: [],
+//     numberOfComments: 0
+// };
 
 const initialState = {
     newsList: [],
     news: {},
-    newsComments: initialNewsCommentsState,
+    newsComments: [],
     loading: false,
     error: null,
     message: null,
@@ -30,7 +30,7 @@ const handlers = {
     [GET_NEWS_START]: (state) => ({...state, loading: true}),
     [GET_NEWS_SUCCESS]: (state, action) => ({...state, news: action.news}),
     [GET_NEWS_ERROR]: (state, action) => ({...state, error: action.error, loading: false}),
-    [NEWS_CLEAR]: (state) => ({...state, news: {}, newsComments: initialNewsCommentsState}),
+    [NEWS_CLEAR]: (state) => ({...state, news: {}, newsComments: []}),
     [GET_COMMENTS_START]: (state) => ({...state}),
     [GET_COMMENTS_SUCCESS]: (state, action) => ({...state, newsComments: action.newsComments, loading: false}),
     [GET_COMMENTS_ERROR]: (state, action) => ({...state, error: action.error, loading: false}),

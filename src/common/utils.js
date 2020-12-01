@@ -32,5 +32,9 @@ export const objIsEmpty = (obj) => {
 };
 
 export const isObj = (obj) => {
-    return obj !== null && typeof obj === 'object' && !Array.isArray(obj)
+    return obj !== null && typeof obj === 'object' && !Array.isArray(obj);
 };
+
+export function copy(entity) {
+    return JSON.parse(JSON.stringify(entity));
+}

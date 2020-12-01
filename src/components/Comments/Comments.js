@@ -1,25 +1,59 @@
 import React from 'react';
 import classes from './Comments.module.scss'
 import {getDate} from "../../common/utils";
+import {Loader} from "../Loader/Loader";
 
-export const Comments = ({comments, openedReplies, onChange}) => {
-    const openReplies = (commentId) => {
+export const Comments = ({comments, openedReplies, onChange, handler, path = []}) => {
+    const openReplies = (commentId, kids) => {
         if (openedReplies[commentId]) {
             delete openedReplies[commentId];
         } else {
             openedReplies[commentId] = {};
+            if (isNeedToLoadKids(kids)) {
+                handler([...path, commentId]);
+            }
         }
         onChange(openedReplies)
     };
 
-    const handleSubReplies = (optionId, subSelections) => {
-        openedReplies[optionId] = subSelections;
+    const handleSubReplies = (commentId, subSelections) => {
+        openedReplies[commentId] = subSelections;
         onChange(openedReplies);
     };
 
-    const repliesText = (childCommentsNumber) => {
-        return childCommentsNumber ? `${childCommentsNumber} replies` : ''
+    const isNeedToLoadKids = (kids) => {
+        return  kids[0].type !== 'comment';
     };
+
+    const isShowComments = (kids, commentId) => {
+        return typeof kids !== 'undefined' && openedReplies.hasOwnProperty(commentId);
+
+    };
+
+    const repliesText = (kids) => {
+        return kids ? `${kids.length} replies` : ''
+    };
+
+    const generateChildComment = (comment) => {
+        if (isShowComments(comment.kids, comment.id)) {
+            if (isNeedToLoadKids(comment.kids)) {
+                return <div style={{background: 'red'}}>AAA</div>
+            } else {
+                return (
+                    <Comments
+                        comments={comment.kids}
+                        openedReplies={openedReplies[comment.id]}
+                        onChange={(subSelection) => handleSubReplies(comment.id, subSelection, comment.kids)}
+                        handler={(path) => handler(path)}
+                        path={[...path, comment.id]}
+                    />
+                )
+            }
+        } else {
+            return null
+        }
+    };
+
 
     return (
         <React.Fragment>
@@ -35,18 +69,13 @@ export const Comments = ({comments, openedReplies, onChange}) => {
                                 <div className={classes.bottom}>
                                     <div className={classes.time}>{getDate(comment.time)}</div>
                                     <div onClick={() => {
-                                        openReplies(comment.id)
+                                        openReplies(comment.id, comment.kids)
                                     }}
-                                         className={classes.replies}>{repliesText(comment.childCommentsNumber)}</div>
+                                         className={classes.replies}>{repliesText(comment.kids)}</div>
                                 </div>
                                 <React.Fragment>
                                     {
-                                        comment.kids && openedReplies[comment.id] &&
-                                        <Comments
-                                            comments={comment.kids}
-                                            openedReplies={openedReplies[comment.id]}
-                                            onChange={(subSelection) => handleSubReplies(comment.id, subSelection)}
-                                        />
+                                        generateChildComment(comment)
                                     }
                                 </React.Fragment>
                             </div>

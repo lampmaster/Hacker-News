@@ -30,19 +30,24 @@ class News extends Component {
 
     autoUpdateComments() {
         this.autoupdateTimer = setInterval(() => {
-            this.props.getComments(this.newsId);
+            // this.props.getComments(this.newsId);
         }, 60000)
     }
 
     getComments() {
-        clearTimeout(this.autoupdateTimer);
-        this.autoUpdateComments();
-        this.props.getComments(this.newsId);
+        // clearTimeout(this.autoupdateTimer);
+        // this.autoUpdateComments();
+        // this.props.getComments(this.newsId);
     }
 
     goToPage() {
         window.open(this.props.news.url)
     };
+
+    commentHandler(path) {
+        const parentId = path[path.length - 1];
+        this.props.getComments(parentId, path);
+    }
 
     render() {
         return (
@@ -80,9 +85,10 @@ class News extends Component {
                                     >Update</Button>
                                 </div>
                                 <Comments
-                                    comments={this.props.newsComments.comments}
+                                    comments={this.props.newsComments}
                                     openedReplies={this.state.openedReplies}
                                     onChange={(openedReplies) => this.setState({openedReplies})}
+                                    handler={(path) => this.commentHandler(path)}
                                 />
                             </div>
                         </React.Fragment>
@@ -104,7 +110,7 @@ function mapDispatchToProps(dispatch) {
     return {
         getNews: (newsId) => dispatch(getNews(newsId)),
         clearNews: () => dispatch(clearNews()),
-        getComments: (newsId) => dispatch(getComments(newsId)),
+        getComments: (commentIDs, path) => dispatch(getComments(commentIDs, path)),
     }
 }
 
