@@ -72,12 +72,12 @@ export function getCommentsInCurrentNode(parentId, path) {
 }
 
 export function getComments(newsId, map = {}) {
-    return async (dispatch, getState) => {
+    return async dispatch => {
         dispatch(getCommentsStart());
         try {
             const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`);
             dispatch(setMessage('Comments loading...'));
-            if (response.data.kids && getState().newsComments.numberOfComments !== response.data.descendants) {
+            if (response.data.kids) {
                 let comments = await parseComments(response.data.kids);
 
                 if (!objIsEmpty(map)) {
@@ -92,7 +92,7 @@ export function getComments(newsId, map = {}) {
                 dispatch(getCommentsSuccess(newCommentsState));
                 dispatch(setMessage('Comments have been updated'));
             } else {
-                dispatch(setMessage('The number of comments has not changed'));
+                dispatch(newsHasNoComments());
             }
         } catch (e) {
             dispatch(getCommentsError(e))
@@ -150,33 +150,6 @@ async function loadCommentWithMap(comments, map) {
 
     return await wrap(commentsCopy, map);
 }
-
-// async function parseComments(commentsIDs) {
-//     async function wrapper(ids) {
-//         let numberOfComments = ids.length;
-//         const result = await Promise.all(ids.map(async commentID => {
-//             const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${commentID}.json?print=pretty`);
-//             const comment = response.data;
-//
-//             if (comment.deleted) {
-//                 comment.by = 'Deleted comment'
-//             }
-//
-//             if (typeof comment.kids !== "undefined") {
-//                 const {comments, childCommentsNumber} = await wrapper(comment.kids);
-//                 comment.kids = comments;
-//                 comment.childCommentsNumber = childCommentsNumber;
-//                 numberOfComments += childCommentsNumber;
-//             }
-//             return comment
-//         }));
-//
-//         return {comments: result, childCommentsNumber: numberOfComments};
-//     }
-//
-//     const {comments, childCommentsNumber} = await wrapper(commentsIDs);
-//     return {comments, numberOfComments: childCommentsNumber};
-// }
 
 export function clearError() {
     return {

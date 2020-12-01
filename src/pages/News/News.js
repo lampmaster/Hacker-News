@@ -36,7 +36,7 @@ class News extends Component {
     autoUpdateComments() {
         this.autoupdateTimer = setInterval(() => {
             this.props.getComments(this.newsId, this.state.openedReplies);
-        }, 60000)
+        }, 60000);
     }
 
     updateComments() {
@@ -45,7 +45,7 @@ class News extends Component {
         this.props.getComments(this.newsId, this.state.openedReplies);
     }
 
-    goToPage() {
+    goToExternalPage() {
         window.open(this.props.news.url)
     };
 
@@ -76,7 +76,7 @@ class News extends Component {
                                                 <div>{getDate(this.props.news.time)}</div>
                                             </div>
                                         </div>
-                                        <div onClick={() => this.goToPage()} className={classes.site}>{getHostName(this.props.news.url)}</div>
+                                        <div onClick={() => this.goToExternalPage()} className={classes.site}>{getHostName(this.props.news.url)}</div>
                                     </div>
                                 </div>
                             }

@@ -11,7 +11,7 @@ import {
 
 const initialNewsCommentsState = {
     comments: [],
-    numberOfComments: 0
+    numberOfComments: null
 };
 
 const initialState = {
@@ -30,14 +30,14 @@ const handlers = {
     [GET_NEWS_START]: (state) => ({...state, loading: true}),
     [GET_NEWS_SUCCESS]: (state, action) => ({...state, news: action.news}),
     [GET_NEWS_ERROR]: (state, action) => ({...state, error: action.error, loading: false}),
-    [NEWS_CLEAR]: (state) => ({...state, news: {}, newsComments: []}),
+    [NEWS_CLEAR]: (state) => ({...state, news: {}, newsComments: initialNewsCommentsState}),
     [GET_COMMENTS_START]: (state) => ({...state}),
     [GET_COMMENTS_SUCCESS]: (state, action) => ({...state, newsComments: action.newsComments, loading: false}),
     [GET_COMMENTS_ERROR]: (state, action) => ({...state, error: action.error, loading: false}),
     [CLEAR_ERROR]: (state) => ({...state, error: null}),
     [SET_MESSAGE]: (state, action) => ({...state, message: action.message}),
     [CLEAR_MESSAGE]: (state) => ({...state, message: null}),
-    [NEWS_HAS_NO_COMMENTS]: state => ({...state, loading: false}),
+    [NEWS_HAS_NO_COMMENTS]: state => ({...state, loading: false, message: 'The news has no comments yet :('}),
     DEFAULT: state => state
 };
 
