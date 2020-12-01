@@ -5,16 +5,16 @@ import {Loader} from "../../components/Loader/Loader";
 import {getDate, getHostName, objIsEmpty} from "../../common/utils";
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
-import {clearNews, getComments, getNews} from "../../store/actions/newsActions";
+import {clearNews, forceGetComments, getComments, getNews} from "../../store/actions/newsActions";
 import {Comments} from "../../components/Comments/Comments";
 
 class News extends Component {
     constructor(props) {
         super(props);
-        this.newsId = this.props.match.params.id;
         this.state = {
             openedReplies: {}
         };
+        this.newsId = this.props.match.params.id;
         this.autoupdateTimer = null;
     }
 
@@ -35,9 +35,9 @@ class News extends Component {
     }
 
     getComments() {
-        // clearTimeout(this.autoupdateTimer);
-        // this.autoUpdateComments();
-        // this.props.getComments(this.newsId);
+        clearTimeout(this.autoupdateTimer);
+        this.autoUpdateComments();
+        this.props.forceGetComments(this.newsId, this.state.openedReplies);
     }
 
     goToPage() {
@@ -50,6 +50,7 @@ class News extends Component {
     }
 
     render() {
+        console.log(this.state.openedReplies);
         return (
             <React.Fragment>
                 <div className={classes.navigation}>
@@ -111,6 +112,7 @@ function mapDispatchToProps(dispatch) {
         getNews: (newsId) => dispatch(getNews(newsId)),
         clearNews: () => dispatch(clearNews()),
         getComments: (commentIDs, path) => dispatch(getComments(commentIDs, path)),
+        forceGetComments: (newsId, map) => dispatch(forceGetComments(newsId, map))
     }
 }
 

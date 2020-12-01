@@ -9,7 +9,7 @@ import {
     GET_NEWS_START,
     GET_NEWS_SUCCESS, NEWS_CLEAR, NEWS_HAS_NO_COMMENTS, SET_MESSAGE
 } from "./actionTypes";
-import {copy} from "../../common/utils";
+import {copy, objIsEmpty} from "../../common/utils";
 
 export function getNewsList(){
     return async dispatch => {
@@ -76,6 +76,26 @@ export function getComments(parentId, path) {
     }
 }
 
+export function forceGetComments(newsId, map) {
+    return async (dispatch) => {
+        dispatch(getCommentsStart());
+        try {
+            const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`);
+            if (response.data.kids) {
+                let comments = await parseComments(response.data.kids);
+
+                if (!objIsEmpty(map)) {
+                    comments = await loadCommentWithMap(comments, map)
+                }
+
+                dispatch(getCommentsSuccess(comments))
+            }
+        } catch (e) {
+            dispatch(getCommentsError(e))
+        }
+    }
+}
+
 async function parseComments(commentsIDs) {
     return await Promise.all(commentsIDs.map(async commentID => {
         const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${commentID}.json?print=pretty`);
@@ -104,9 +124,27 @@ function findParentAndUpdateComments(commentsToAdd, path, commentsState) {
 
     const commentsStateCopy = copy(commentsState);
     wrap(commentsToAdd, path, commentsStateCopy);
-    console.log(commentsStateCopy);
 
-    return commentsStateCopy
+    return commentsStateCopy;
+}
+
+async function loadCommentWithMap(comments, map) {
+    const commentsCopy = copy(comments);
+
+    async function wrap(comments, map) {
+        return await Promise.all(comments.map(async comment => {
+            if (typeof map[comment.id] !== 'undefined') {
+                let kidsComments = await parseComments(comment.kids);
+                if (!objIsEmpty(map[comment.id])) {
+                    kidsComments = await wrap(kidsComments, map[comment.id]);
+                }
+                comment.kids = kidsComments
+            }
+            return comment
+        }))
+    }
+
+    return await wrap(commentsCopy, map);
 }
 
 // async function parseComments(commentsIDs) {

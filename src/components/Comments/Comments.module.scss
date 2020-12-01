@@ -46,7 +46,17 @@
     color: #0575ff;
     cursor: pointer;
   }
+
+  .commentsLoader {
+    width: 100%;
+    height: 70px;
+    margin-top: 10px;
+    background: #f1f6fd;
+    border-radius: 10px;
+    animation: commentsLoader 1.5s infinite;
+  }
 }
+
 
 @keyframes show-comments {
   from {
@@ -55,5 +65,19 @@
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes commentsLoader {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
   }
 }

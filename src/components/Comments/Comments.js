@@ -1,7 +1,6 @@
 import React from 'react';
 import classes from './Comments.module.scss'
 import {getDate} from "../../common/utils";
-import {Loader} from "../Loader/Loader";
 
 export const Comments = ({comments, openedReplies, onChange, handler, path = []}) => {
     const openReplies = (commentId, kids) => {
@@ -37,7 +36,7 @@ export const Comments = ({comments, openedReplies, onChange, handler, path = []}
     const generateChildComment = (comment) => {
         if (isShowComments(comment.kids, comment.id)) {
             if (isNeedToLoadKids(comment.kids)) {
-                return <div style={{background: 'red'}}>AAA</div>
+                return <div className={classes.commentsLoader}/>
             } else {
                 return (
                     <Comments
