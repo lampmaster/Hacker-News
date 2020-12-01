@@ -1,5 +1,3 @@
-@import "../../common/style";
-
 .wrapper {
   margin: 10px 0;
   display: flex;
@@ -39,7 +37,7 @@
   }
 
   .time {
-    color: $second-color;
+    color: var(--second-color);
   }
 
   .replies {

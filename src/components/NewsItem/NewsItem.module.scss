@@ -1,5 +1,3 @@
-@import "../../common/style";
-
 .Item {
   display: flex;
   flex-direction: column;
@@ -8,8 +6,7 @@
   padding: 20px;
 
   background: white;
-  //box-shadow: 0 0 10px rgba(0, 0, 0, .05);
-  border-radius: $borders-radius;
+  border-radius: var(--borders-radius);
 
   &:not(:last-child) {
     margin-bottom: 10px;
