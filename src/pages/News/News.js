@@ -34,6 +34,12 @@ class News extends Component {
         }, 60000)
     }
 
+    getComments() {
+        clearTimeout(this.autoupdateTimer);
+        this.autoUpdateComments();
+        this.props.getComments(this.newsId);
+    }
+
     goToPage() {
         window.open(this.props.news.url)
     };
@@ -67,10 +73,10 @@ class News extends Component {
 
                             <div className={classes.Container}>
                                 <div className={classes.Comments}>
-                                    <div>{`Comments ${this.props.newsComments.numberOfComments}`}</div>
+                                    <div>{`Comments ${this.props.news.descendants}`}</div>
                                     <Button
                                         color="primary"
-                                        onClick={() => this.props.getComments(this.newsId)}
+                                        onClick={() => this.getComments()}
                                     >Update</Button>
                                 </div>
                                 <Comments
