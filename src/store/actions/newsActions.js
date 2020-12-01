@@ -59,17 +59,6 @@ export function getComments(parentId, path) {
             } else {
                 dispatch(setMessage('The news has no comments yet :('));
             }
-
-            // const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`);
-            // if (typeof response.data.kids !== 'undefined') {
-            //     dispatch(setMessage('Comments loading...'));
-            //     const comments = await parseComments(response.data.kids);
-            //     dispatch(getCommentsSuccess(comments));
-            //     dispatch(setMessage('Comments updated'))
-            // } else {
-            //     dispatch(setMessage('The news has no comments yet :('));
-            //     dispatch(newsHasNoComments())
-            // }
         } catch (e) {
             dispatch(getCommentsError(e))
         }
@@ -77,18 +66,20 @@ export function getComments(parentId, path) {
 }
 
 export function forceGetComments(newsId, map) {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         dispatch(getCommentsStart());
         try {
             const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`);
-            if (response.data.kids) {
+            if (response.data.kids && getState().news.descendants !== response.data.descendants) {
                 let comments = await parseComments(response.data.kids);
 
                 if (!objIsEmpty(map)) {
                     comments = await loadCommentWithMap(comments, map)
                 }
-
+                dispatch(setMessage('Comments have been updated'));
                 dispatch(getCommentsSuccess(comments))
+            } else {
+                dispatch(setMessage('The number of comments has not changed'));
             }
         } catch (e) {
             dispatch(getCommentsError(e))
