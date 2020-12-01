@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import Snackbar from "@material-ui/core/Snackbar";
 import {clearError, clearMessage} from "../../store/actions/newsActions";
 import {connect} from "react-redux";
+import classes from './Message.module.scss'
 
 class Message extends Component {
     clearMessageText() {
@@ -17,9 +18,12 @@ class Message extends Component {
         return this.props.error?.message || this.props.message
     }
 
+
     render() {
+        const snackbarStyles = this.props.error !== null ? {className: classes.Snackbar} : {};
+
         return (
-            <Snackbar  open={this.isOpen()} autoHideDuration={6000} onClose={() => this.clearMessageText()} message={this.getMessage()}>
+            <Snackbar ContentProps={snackbarStyles} open={this.isOpen()} autoHideDuration={6000} onClose={() => this.clearMessageText()} message={this.getMessage()}>
             </Snackbar>
         )
     }
