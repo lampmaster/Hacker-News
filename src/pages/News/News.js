@@ -5,7 +5,12 @@ import {Loader} from "../../components/Loader/Loader";
 import {getDate, getHostName, objIsEmpty} from "../../common/utils";
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
-import {clearNews, forceGetComments, getComments, getNews} from "../../store/actions/newsActions";
+import {
+    clearNews,
+    getComments,
+    getCommentsInCurrentNode,
+    getNews
+} from "../../store/actions/newsActions";
 import {Comments} from "../../components/Comments/Comments";
 
 class News extends Component {
@@ -30,14 +35,14 @@ class News extends Component {
 
     autoUpdateComments() {
         this.autoupdateTimer = setInterval(() => {
-            // this.props.getComments(this.newsId);
+            this.props.getComments(this.newsId, this.state.openedReplies);
         }, 60000)
     }
 
-    getComments() {
+    updateComments() {
         clearTimeout(this.autoupdateTimer);
         this.autoUpdateComments();
-        this.props.forceGetComments(this.newsId, this.state.openedReplies);
+        this.props.getComments(this.newsId, this.state.openedReplies);
     }
 
     goToPage() {
@@ -46,11 +51,10 @@ class News extends Component {
 
     commentHandler(path) {
         const parentId = path[path.length - 1];
-        this.props.getComments(parentId, path);
+        this.props.getCommentsInCurrentNode(parentId, path);
     }
 
     render() {
-        console.log(this.state.openedReplies);
         return (
             <React.Fragment>
                 <div className={classes.navigation}>
@@ -79,14 +83,14 @@ class News extends Component {
 
                             <div className={classes.Container}>
                                 <div className={classes.Comments}>
-                                    <div>{`Comments ${this.props.news.descendants}`}</div>
+                                    <div>{`Comments ${this.props.newsComments.numberOfComments}`}</div>
                                     <Button
                                         color="primary"
-                                        onClick={() => this.getComments()}
+                                        onClick={() => this.updateComments()}
                                     >Update</Button>
                                 </div>
                                 <Comments
-                                    comments={this.props.newsComments}
+                                    comments={this.props.newsComments.comments}
                                     openedReplies={this.state.openedReplies}
                                     onChange={(openedReplies) => this.setState({openedReplies})}
                                     handler={(path) => this.commentHandler(path)}
@@ -111,8 +115,8 @@ function mapDispatchToProps(dispatch) {
     return {
         getNews: (newsId) => dispatch(getNews(newsId)),
         clearNews: () => dispatch(clearNews()),
-        getComments: (commentIDs, path) => dispatch(getComments(commentIDs, path)),
-        forceGetComments: (newsId, map) => dispatch(forceGetComments(newsId, map))
+        getCommentsInCurrentNode: (commentIDs, path, newsId) => dispatch(getCommentsInCurrentNode(commentIDs, path, newsId)),
+        getComments: (newsId, map) => dispatch(getComments(newsId, map))
     }
 }
 

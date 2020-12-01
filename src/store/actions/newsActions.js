@@ -18,7 +18,7 @@ export function getNewsList(){
             const response = await axios.get('https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty');
             const newsIDs = response.data.slice(0, 100);
             let newsList = await Promise.all(newsIDs.map(async (newsID) => {
-                const resp = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${String(newsID)}.json?print=pretty`);
+                const resp = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsID}.json?print=pretty`);
                 return resp.data;
             }));
 
@@ -45,17 +45,23 @@ export function getNews(newsId) {
     }
 }
 
-export function getComments(parentId, path) {
+export function getCommentsInCurrentNode(parentId, path) {
     return async (dispatch, getState) => {
         dispatch(getCommentsStart());
         try {
-            const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${parentId}.json?print=pretty`);
-            if (response.data.kids) {
-                let comments = await parseComments(response.data.kids);
+            const commentResponse = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${parentId}.json?print=pretty`);
+            if (commentResponse.data.kids) {
+                let comments = await parseComments(commentResponse.data.kids);
                 if (path) {
-                    comments = findParentAndUpdateComments(comments, path, getState().newsComments);
+                    comments = findParentAndUpdateComments(comments, path, getState().newsComments.comments);
                 }
-                dispatch(getCommentsSuccess(comments))
+
+                const newCommentsState = {
+                    comments: comments,
+                    numberOfComments: getState().newsComments.numberOfComments
+                };
+
+                dispatch(getCommentsSuccess(newCommentsState))
             } else {
                 dispatch(setMessage('The news has no comments yet :('));
             }
@@ -65,19 +71,26 @@ export function getComments(parentId, path) {
     }
 }
 
-export function forceGetComments(newsId, map) {
+export function getComments(newsId, map = {}) {
     return async (dispatch, getState) => {
         dispatch(getCommentsStart());
         try {
             const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`);
-            if (response.data.kids && getState().news.descendants !== response.data.descendants) {
+            dispatch(setMessage('Comments loading...'));
+            if (response.data.kids && getState().newsComments.numberOfComments !== response.data.descendants) {
                 let comments = await parseComments(response.data.kids);
 
                 if (!objIsEmpty(map)) {
                     comments = await loadCommentWithMap(comments, map)
                 }
+
+                const newCommentsState = {
+                    comments: comments,
+                    numberOfComments: response.data.descendants
+                };
+
+                dispatch(getCommentsSuccess(newCommentsState));
                 dispatch(setMessage('Comments have been updated'));
-                dispatch(getCommentsSuccess(comments))
             } else {
                 dispatch(setMessage('The number of comments has not changed'));
             }

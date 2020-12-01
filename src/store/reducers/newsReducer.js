@@ -9,15 +9,15 @@ import {
     GET_NEWS_SUCCESS, NEWS_CLEAR, NEWS_HAS_NO_COMMENTS, SET_MESSAGE,
 } from "../actions/actionTypes";
 
-// const initialNewsCommentsState = {
-//     comments: [],
-//     numberOfComments: 0
-// };
+const initialNewsCommentsState = {
+    comments: [],
+    numberOfComments: 0
+};
 
 const initialState = {
     newsList: [],
     news: {},
-    newsComments: [],
+    newsComments: initialNewsCommentsState,
     loading: false,
     error: null,
     message: null,
