@@ -38,3 +38,15 @@ export const isObj = (obj) => {
 export function copy(entity) {
     return JSON.parse(JSON.stringify(entity));
 }
+
+export function debounce(fn, wait) {
+    let timeout;
+    return function(...args) {
+        const latter = () => {
+            clearTimeout(timeout);
+            fn.apply(this, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(latter, wait)
+    }
+}

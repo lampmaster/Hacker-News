@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import classes from './News.module.scss'
 import Button from "@material-ui/core/Button";
 import {Loader} from "../../components/Loader/Loader";
-import {getDate, getHostName, objIsEmpty} from "../../common/utils";
+import {debounce, getDate, getHostName, objIsEmpty} from "../../common/utils";
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {
@@ -24,6 +24,7 @@ class News extends Component {
     }
 
     componentDidMount() {
+        this.updateComments = debounce(this.updateComments, 300);
         this.props.getNews(this.newsId);
         this.autoUpdateComments();
     }

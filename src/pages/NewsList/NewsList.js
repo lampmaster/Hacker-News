@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {getNewsList, setMessage} from "../../store/actions/newsActions";
 import {Loader} from "../../components/Loader/Loader";
 import Button from "@material-ui/core/Button";
+import {debounce} from "../../common/utils";
 
 class NewsList extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class NewsList extends Component {
     }
 
     componentDidMount() {
+        this.updateNewsList = debounce(this.updateNewsList, 300);
         this.props.getNewsList();
         this.autoUpdateNews();
     }
