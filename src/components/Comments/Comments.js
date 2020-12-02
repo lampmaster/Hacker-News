@@ -26,7 +26,6 @@ export const Comments = ({comments, openedReplies, onChange, handler, path = []}
 
     const isShowComments = (kids, commentId) => {
         return typeof kids !== 'undefined' && openedReplies.hasOwnProperty(commentId);
-
     };
 
     const repliesText = (kids) => {

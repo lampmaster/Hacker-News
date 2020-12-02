@@ -16,14 +16,14 @@ class NewsList extends Component {
     componentDidMount() {
         this.updateNewsList = debounce(this.updateNewsList, 300);
         this.props.getNewsList();
-        this.autoUpdateNews();
+        this.autoUpdateNewsList();
     }
 
     componentWillUnmount() {
         clearTimeout(this.autoupdateTimer);
     }
 
-    autoUpdateNews() {
+    autoUpdateNewsList() {
         this.autoupdateTimer = setInterval(() => {
             this.props.getNewsList();
             this.props.setMessage('Auto update news list')
@@ -33,7 +33,7 @@ class NewsList extends Component {
     updateNewsList() {
         this.props.getNewsList();
         clearTimeout(this.autoupdateTimer);
-        this.autoUpdateNews();
+        this.autoUpdateNewsList();
     }
 
     renderNewsList() {
