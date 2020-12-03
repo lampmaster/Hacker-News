@@ -51,10 +51,8 @@ export function getCommentsInCurrentNode(parentId, path) {
         try {
             const commentResponse = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${parentId}.json?print=pretty`);
             if (commentResponse.data.kids) {
-                let comments = await parseComments(commentResponse.data.kids);
-                if (path) {
-                    comments = findParentAndUpdateComments(comments, path, getState().newsComments.comments);
-                }
+                let kidsComments = await parseComments(commentResponse.data.kids);
+                let comments = findParentAndUpdateComments(kidsComments, path, getState().newsComments.comments);
 
                 const newCommentsState = {
                     comments: comments,
@@ -62,8 +60,6 @@ export function getCommentsInCurrentNode(parentId, path) {
                 };
 
                 dispatch(getCommentsSuccess(newCommentsState))
-            } else {
-                dispatch(setMessage('The news has no comments yet :('));
             }
         } catch (e) {
             dispatch(getCommentsError(e))
