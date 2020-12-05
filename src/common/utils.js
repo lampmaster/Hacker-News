@@ -1,3 +1,6 @@
+/**
+ * Возвращает дату в формате dd.mm.yyyy at hh:mm
+ */
 export const getDate = (unixTime) => {
     const date = new Date(unixTime * 1000);
     const d = date.getDate();
