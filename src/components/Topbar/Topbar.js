@@ -5,7 +5,7 @@ export const TopBar = () => (
     <div className={classes.TopBar}>
         <div className={classes.Container}>
             <img className={classes.avatar}
-                 src={'https://avatars.dicebear.com/api/bottts/.svg?colors[]=blue'} alt=""/>
+                 src={'https://avatars.dicebear.com/api/bottts/1.svg?colors[]=blue'} alt=""/>
             HackerNews
         </div>
     </div>
