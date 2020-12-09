@@ -11,6 +11,10 @@ import {
 } from "./actionTypes";
 import {copy, objIsEmpty} from "../../common/utils";
 
+const getItemUrl = (id) => {
+    return `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
+};
+
 export function getNewsList(){
     return async dispatch => {
         dispatch(getNewsListStart());
@@ -18,7 +22,7 @@ export function getNewsList(){
             const response = await axios.get('https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty');
             const newsIDs = response.data.slice(0, 100);
             let newsList = await Promise.all(newsIDs.map(async (newsID) => {
-                const resp = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsID}.json?print=pretty`);
+                const resp = await axios.get(getItemUrl(newsID));
                 return resp.data;
             }));
 
@@ -35,7 +39,7 @@ export function getNews(newsId) {
     return async dispatch => {
         dispatch(getNewsStart());
         try {
-            const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`);
+            const response = await axios.get(getItemUrl(newsId));
             const news = response.data;
             dispatch(getComments(newsId));
             dispatch(getNewsSuccess(news));
@@ -49,7 +53,7 @@ export function getCommentsInCurrentNode(parentId, path) {
     return async (dispatch, getState) => {
         dispatch(getCommentsStart());
         try {
-            const commentResponse = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${parentId}.json?print=pretty`);
+            const commentResponse = await axios.get(getItemUrl(parentId));
             if (commentResponse.data.kids) {
                 let kidsComments = await parseComments(commentResponse.data.kids);
                 let comments = findParentAndUpdateComments(kidsComments, path, getState().newsComments.comments);
@@ -71,7 +75,7 @@ export function getComments(newsId, map = {}) {
     return async dispatch => {
         dispatch(getCommentsStart());
         try {
-            const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${newsId}.json?print=pretty`);
+            const response = await axios.get(getItemUrl(newsId));
             dispatch(setMessage('Comments loading...'));
             if (response.data.kids) {
                 let comments = await parseComments(response.data.kids);
@@ -98,7 +102,7 @@ export function getComments(newsId, map = {}) {
 
 async function parseComments(commentsIDs) {
     return await Promise.all(commentsIDs.map(async commentID => {
-        const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${commentID}.json?print=pretty`);
+        const response = await axios.get(getItemUrl(commentID));
         const comment = response.data;
         if (comment.deleted) {
             comment.by = 'Deleted comment'
@@ -124,7 +128,6 @@ function findParentAndUpdateComments(commentsToAdd, path, commentsState) {
 
     const commentsStateCopy = copy(commentsState);
     wrap(commentsToAdd, path, commentsStateCopy);
-
     return commentsStateCopy;
 }
 
