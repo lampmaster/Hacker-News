@@ -2,6 +2,10 @@
  * Возвращает дату в формате dd.mm.yyyy at hh:mm
  */
 export const getDate = (unixTime) => {
+    if (!unixTime || Number.isNaN(Number(unixTime)) ) {
+        return ''
+    }
+
     const date = new Date(unixTime * 1000);
     const d = date.getDate();
     const m = date.getMonth();
@@ -46,7 +50,6 @@ export function debounce(fn, wait) {
     let timeout;
     return function(...args) {
         const latter = () => {
-            clearTimeout(timeout);
             fn.apply(this, args);
         };
         clearTimeout(timeout);
