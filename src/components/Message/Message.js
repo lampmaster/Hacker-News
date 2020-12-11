@@ -10,11 +10,11 @@ class Message extends Component {
         this.props.clearMessage();
     }
 
-    isOpen() {
+    get isOpen() {
         return this.props.error !== null || this.props.message !== null;
     }
 
-    getMessage() {
+    get message() {
         return this.props.error?.message || this.props.message
     }
 
@@ -23,7 +23,12 @@ class Message extends Component {
         const snackbarStyles = this.props.error !== null ? {className: classes.Snackbar} : {};
 
         return (
-            <Snackbar ContentProps={snackbarStyles} open={this.isOpen()} autoHideDuration={6000} onClose={() => this.clearMessageText()} message={this.getMessage()}>
+            <Snackbar
+                ContentProps={snackbarStyles}
+                open={this.isOpen}
+                autoHideDuration={6000}
+                onClose={() => this.clearMessageText()}
+                message={this.message}>
             </Snackbar>
         )
     }
