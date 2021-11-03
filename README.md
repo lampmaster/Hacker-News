@@ -1,5 +1,7 @@
 # Hacker News App
 
+UI для отображения новостей с сайта hacker news
+
 ## Available Scripts
 
 ### `npm start`
